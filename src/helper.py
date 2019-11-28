@@ -13,4 +13,4 @@ def separate_stereo_channels(filename):
     _, signal_1 = wavfile.read(output_filenames[0])
     _, signal_2 = wavfile.read(output_filenames[1])
 
-    return fs, signal_1, signal_2
+    return fs, signal_1, signal_2, output_filenames[0], output_filenames[1]
