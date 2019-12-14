@@ -1,24 +1,12 @@
 import numpy as np
 import helper
-import params
 
 
-def stft_domain_fast_rls_defered_filter_coefs(X_1,
-                                              X_2,
-                                              d=params.d,
-                                              filter_length=params.filter_length,
-                                              f_factor=params.F_FACTOR,
-                                              delta=params.DELTA):
+def stft_fast_rls_def_coefs(X_1, X_2, d, filter_length, f_factor, delta):
     # Retrieve useful information
     n_frames = X_1.shape[1]
     n_freqs = X_1.shape[0]
     dtype = X_1.dtype
-
-    print('Number of frames: {}'.format(n_frames))
-    print('Number of frequencies: {}'.format(n_freqs))
-    print('Filter length: {}'.format(filter_length))
-    print('Forgetting_factor: {}'.format(f_factor))
-    print('Delta: {}'.format(delta))
 
     # Initialize variables
     h = np.zeros((n_freqs, n_frames, filter_length, 1), dtype=dtype)
@@ -34,7 +22,8 @@ def stft_domain_fast_rls_defered_filter_coefs(X_1,
     epsilon = np.zeros(X_1.shape, dtype=dtype)
 
     for m in np.arange(n_frames - 1) + 1:
-        print(m)
+        helper.update_progress(m/n_frames)
+        print('Frame {}/{}'.format(m, n_frames))
         for f in np.arange(n_freqs):
             temp = np.reshape(np.conj(x_2[f]).transpose() @ P[m - 1], (1, filter_length))
 
@@ -54,10 +43,10 @@ def stft_domain_fast_rls_defered_filter_coefs(X_1,
             epsilon[f][m] = X_1[f][m]
             if m >= d:
                 epsilon[f][m] -= np.transpose(np.conjugate(2*h[f][m - d])) @ x_2[f]
-
         # If we still have not reached the last frame, refresh x_2
         if m != n_frames - 1:
             x_2 = np.roll(np.transpose(x_2), 1)
             x_2[0] = X_2[:, m + 1]
             x_2 = np.transpose(x_2)
+    helper.update_progress(1)
     return epsilon
