@@ -50,3 +50,35 @@ def stft_fast_rls_def_coefs(X_1, X_2, d, filter_length, f_factor, delta):
             x_2 = np.transpose(x_2)
     helper.update_progress(1)
     return epsilon
+
+
+def stft_wiener_filter(X_1, X_2, alpha):
+    n_freqs = X_1.shape[0]
+    n_frames = X_1.shape[1]
+
+    # Init variables
+    r_0_1_prev = np.zeros(n_freqs, dtype=complex)
+    r_0_1 = np.zeros(n_freqs, dtype=complex)
+
+    r_0_prev = np.zeros(n_freqs, dtype=complex)
+    r_0 = np.zeros(n_freqs, dtype=complex)
+
+    h = np.zeros(n_freqs, dtype=complex)
+    output = np.zeros(X_1.shape, dtype=complex)
+
+    # Fill the output matrix
+    for m in np.arange(n_frames):
+        helper.update_progress(m / n_frames)
+        print('Frame {}/{}'.format(m, n_frames))
+        for f in range(X_1.shape[0]):
+            r_0_1[f] = alpha * X_2[f, m] * np.conj(X_1[f, m]) + (1 - alpha) * r_0_1_prev[f]
+            r_0[f] = alpha * np.square(np.abs(X_1[f, m])) + (1 - alpha) * r_0_prev[f]
+            if r_0[f] != 0:
+                h[f] = r_0_1[f] / r_0[f]
+            else:
+                print('Encountered a zero in the division')
+        output[:, m] = np.multiply(h, X_1[:, m])
+        r_0_1_prev = r_0_1
+        r_0_prev = r_0
+    helper.update_progress(1)
+    return output

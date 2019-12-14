@@ -17,7 +17,7 @@ def rir_filter(rir_filename, rir_fs, s, resampling_f=0):
 def add_speech(speech_filename, signal_0, signal_1, amp, position='end'):
     fs, _, _, speech_filename_0, _ = helper.separate_stereo_channels(speech_filename)
 
-    speech, fs = librosa.load(paths.DATA_PATH / speech_filename_0, fs)
+    speech, fs = librosa.load(paths.DATA_PATH / (speech_filename_0 + paths.AUDIO_FORMAT), fs)
 
     n_samples = len(signal_0)
     n_samples_speech = len(speech)

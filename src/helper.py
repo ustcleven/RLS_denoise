@@ -14,8 +14,8 @@ def separate_stereo_channels(filename):
     filename_0 = '{}_0'.format(filename)
     filename_1 = '{}_1'.format(filename)
 
-    wavfile.write(paths.DATA_PATH / filename_0, fs, signal[:, 0])
-    wavfile.write(paths.DATA_PATH / filename_1, fs, signal[:, 1])
+    wavfile.write(paths.DATA_PATH / (filename_0 + paths.AUDIO_FORMAT), fs, signal[:, 0])
+    wavfile.write(paths.DATA_PATH / (filename_1 + paths.AUDIO_FORMAT), fs, signal[:, 1])
 
     _, signal_0 = wavfile.read(paths.DATA_PATH / (filename_0 + paths.AUDIO_FORMAT))
     _, signal_1 = wavfile.read(paths.DATA_PATH / (filename_1 + paths.AUDIO_FORMAT))
@@ -72,7 +72,7 @@ def plot_signals(signal_0, signal_1, title, signal_0_name, signal_1_name):
     plt.plot(signal_0, 'b')
     plt.plot(signal_1, 'r')
     plt.title(title)
-    plt.legend(('signal 0', 'signal 1'), loc='upper right')
+    plt.legend((signal_0_name, signal_1_name), loc='upper right')
     plt.xlabel('Samples')
     plt.ylabel('Amplitude')
 
