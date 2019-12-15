@@ -8,7 +8,7 @@
 
 To run our project, please:
 - Clone this project
-- Download this data folder and place it at the root of the project:
+- Download this data folder and place it at the root of the project: https://drive.google.com/file/d/1x0IpFm5-Ld6oviffbvq4wW0XB98rt3ev/view?usp=sharing
 - Run one of the two Jupyter Notebooks: Wiener or RLS
 
 ## Prerequisites
