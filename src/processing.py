@@ -25,10 +25,12 @@ def add_speech(speech_filename, signal_0, signal_1, amp, position='end'):
     if position == 'mid':
         signal_0[int(n_samples/2) - n_samples_speech:int(n_samples/2)] += speech * amp
         signal_1[int(n_samples/2) - n_samples_speech:int(n_samples/2)] += speech * amp
-    else:
-        position = 'end'
+    elif position == "end":
         signal_0[n_samples - n_samples_speech:n_samples] += speech * amp
         signal_1[n_samples - n_samples_speech:n_samples] += speech * amp
+    else:
+        signal_0 += speech * amp
+        signal_1 += speech * amp
 
     print('Speech added at position {} of the signal.'.format(position))
 

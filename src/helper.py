@@ -10,7 +10,7 @@ import numpy as np
 
 def separate_stereo_channels(filename):
     fs, signal = wavfile.read('{}/{}{}'.format(paths.DATA_PATH, filename, paths.AUDIO_FORMAT))
-
+    print(signal.shape)
     filename_0 = '{}_0'.format(filename)
     filename_1 = '{}_1'.format(filename)
 
